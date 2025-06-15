@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="theme-color" content="#202020"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warteg Alby Putra</title>
+    <link rel="stylesheet" href="Assets/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" 
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <a href="https://wa.me/6287745171436" class="btn-whatsapp" target="_blank">
+        <div class="btn-whatsapp1">
+            <i class="fa-brands fa-whatsapp"></i>
+            <span class="tooltip">WhatsApp</span>
+        </div>
+    </a>
+    
+    <header>
+        <a href="index.html"><img src="Image/logo.png" alt="Logo"></a>
+        </a>
+        <nav>
+            <ul>
+                <li><a href="index.html">Beranda</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="extra.html">Extra</a></li>
+                <li><a href="about.html">Tentang Kami</a></li>
+                <li><a href="contact.html">Hubungi Kami</a></li>
+            </ul>
+        </nav>
+    </header>
+
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .scoreboard {
+            margin: 10px 0;
+            font-size: 1.1rem;
+        }
+
+        #modeSelect {
+            margin: 10px 0;
+            font-size: 1rem;
+            padding: 5px 10px;
+        }
+
+        #status {
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 5px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .cell {
+            background: rgb(207, 255, 34);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            cursor: pointer;
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            user-select: none;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .cell:hover {
+            background: rgb(255, 123, 0);
+        }
+
+        .win {
+            background-color: #4caf50 !important;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        #resetBtn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            background: rgb(0, 0, 0);
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        #resetBtn:hover {
+            background: rgb(255, 123, 0);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Tic Tac Toe</h1>
+
+    <div>
+        <label for="modeSelect">Mode: </label>
+        <select id="modeSelect">
+            <option value="p2">2 Pemain</option>
+            <option value="ai">Lawan AI</option>
+        </select>
+    </div>
+
+    <div class="scoreboard">
+        Skor X: <span id="scoreX">0</span> | Skor O: <span id="scoreO">0</span>
+    </div>
+
+    <div id="status">Player X's turn</div>
+    <div class="board" id="board"></div>
+    <button id="resetBtn">Reset Game</button>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        const board = document.getElementById("board");
+        const status = document.getElementById("status");
+        const resetBtn = document.getElementById("resetBtn");
+        const modeSelect = document.getElementById("modeSelect");
+        const scoreXEl = document.getElementById("scoreX");
+        const scoreOEl = document.getElementById("scoreO");
+
+        let currentPlayer = "X";
+        let gameBoard = Array(9).fill("");
+        let gameActive = true;
+        let mode = "p2";
+        let scoreX = 0;
+        let scoreO = 0;
+
+        const winConditions = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ];
+
+        modeSelect.addEventListener("change", () => {
+            mode = modeSelect.value;
+            resetGame(true);
+        });
+
+        function renderBoard() {
+            board.innerHTML = "";
+            gameBoard.forEach((val, i) => {
+                const cell = document.createElement("div");
+                cell.classList.add("cell");
+                cell.dataset.index = i;
+                cell.textContent = val;
+                cell.addEventListener("click", handleClick);
+                board.appendChild(cell);
+            });
+        }
+
+        function handleClick(e) {
+            const index = e.target.dataset.index;
+
+            if (gameBoard[index] || !gameActive) return;
+
+            gameBoard[index] = currentPlayer;
+            e.target.textContent = currentPlayer;
+
+            checkWinner();
+            if (gameActive) {
+                currentPlayer = currentPlayer === "X" ? "O" : "X";
+                status.textContent = `Player ${currentPlayer}'s turn`;
+
+                if (mode === "ai" && currentPlayer === "O") {
+                    setTimeout(aiMove, 500);
+                }
+            }
+        }
+
+        function aiMove() {
+            let empty = gameBoard.map((val, i) => val === "" ? i : null).filter(v => v !== null);
+            if (empty.length === 0) return;
+
+            let move = empty[Math.floor(Math.random() * empty.length)];
+            gameBoard[move] = "O";
+
+            renderBoard();
+            checkWinner();
+
+            if (gameActive) {
+                currentPlayer = "X";
+                status.textContent = `Player ${currentPlayer}'s turn`;
+            }
+        }
+
+        function checkWinner() {
+            for (let condition of winConditions) {
+                const [a, b, c] = condition;
+                if (gameBoard[a] === gameBoard[b] && gameBoard[b] === gameBoard[c] && gameBoard[a] !== "") {
+                    gameActive = false;
+                    status.textContent = `Player ${gameBoard[a]} wins!`;
+                    updateScore(gameBoard[a]);
+                    highlightWin(condition);
+                    showConfetti();
+                    return;
+                }
+            }
+
+            if (!gameBoard.includes("")) {
+                gameActive = false;
+                status.textContent = "It's a draw!";
+            }
+        }
+
+        function highlightWin(indices) {
+            const cells = document.querySelectorAll(".cell");
+            indices.forEach(i => {
+                cells[i].classList.add("win");
+            });
+        }
+
+        function updateScore(winner) {
+            if (winner === "X") {
+                scoreX++;
+                scoreXEl.textContent = scoreX;
+            } else if (winner === "O") {
+                scoreO++;
+                scoreOEl.textContent = scoreO;
+            }
+        }
+
+        function showConfetti() {
+            confetti({
+                particleCount: 150,
+                spread: 100,
+                origin: { y: 0.6 }
+            });
+        }
+
+        function resetGame(resetScore = false) {
+            gameBoard = Array(9).fill("");
+            currentPlayer = "X";
+            gameActive = true;
+            status.textContent = `Player ${currentPlayer}'s turn`;
+
+            if (resetScore) {
+                scoreX = 0;
+                scoreO = 0;
+                scoreXEl.textContent = "0";
+                scoreOEl.textContent = "0";
+            }
+
+            renderBoard();
+        }
+
+        resetBtn.addEventListener("click", () => resetGame());
+
+        renderBoard();
+    </script>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-left">
+                <img src="Image/logo.png" alt="Logo" class="footer-logo">
+                <p>Jl Kemandoran V <br> Kebayoran Lama - Jakarta Selatan.</p>
+                <h4>Subscribe Us</h4>
+                <div class="subscribe-box">
+                    <input type="email" placeholder="Your Email address">
+                    <button>➔</button>
+                </div>
+            </div>
+            <div class="footer-right">
+                <h4>Social Media</h4>
+                <div class="social-icons">
+                    <a href="#"><img src="Image/Instagram.png" alt="Instagram"></a>
+                    <a href="#"><img src="Image/Facebook.png" alt="Facebook"></a>
+                    <a href="#"><img src="Image/YouTube.png " alt="YouTube"></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="Assets/script.js"></script>
+</body>
+
+</html>

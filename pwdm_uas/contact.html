@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="theme-color" content="#202020"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warteg Alby Putra</title>
+    <link rel="stylesheet" href="Assets/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" 
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <a href="https://wa.me/6287745171436" class="btn-whatsapp" target="_blank">
+        <div class="btn-whatsapp1">
+            <i class="fa-brands fa-whatsapp"></i>
+            <span class="tooltip">WhatsApp</span>
+        </div>
+    </a>
+    
+        <header>
+        <a href="Index.html"><img src="Image/logo.png" alt="Logo"></a>
+        <nav>
+            <ul>
+                <li><a href="index.html">Beranda</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="about.html">Tentang Kami</a></li>
+                <li><a href="contact.html">HubungiKami</a></li>
+                <li><a href="extra.html">Extra</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="banner">
+        <h1 class="banner-text">Informasi Kontak</h1> 
+        <img src="Image/slide3.png" alt="Gambar" />
+    </div>
+    <div class="contacts">
+        <div class="info-container">
+            <div class="info-card">
+                <i class="fas fa-phone"></i>
+                <h3>Phone Number</h3>
+                <p>+62 123-4567-8901</p>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-envelope"></i>
+                <h3>Email Address</h3>
+                <p>warteg@gmail.com</p>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-map-marker-alt"></i>
+                <h3>Location</h3>
+                <p>Jl Kemandoran V, Kebayoran Lama - Jakarta Selatan.</p>
+            </div>
+        </div>
+        <div class="form-card">
+            <h2>Send Message</h2>
+            <p><strong>Send us an email</strong></p>
+            <form action="send_email.php" method="POST">
+                <div class="form-group">
+                    <input type="text" name="name" placeholder="Your Name" required>
+                    <input type="email" name="email" placeholder="Email Address" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="phone" placeholder="Phone Number" required>
+                    <input type="text" name="subject" placeholder="Subject" required>
+                </div>
+                <textarea name="message" rows="5" placeholder="Message" required></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+        </div>      
+    </div>
+    <section>
+        <div class="box">
+            <h1>Lokasi Warteg Alby Putra</h1>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d247.90138763697468!2d106.78346672247406!3d-6.2079101887977775!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f6c55aed9ab5%3A0xeb0d04efbe573b64!2sWarteg%20Alby%20Putra!5e0!3m2!1sen!2sid!4v1748837482588!5m2!1sen!2sid"  
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </section> 
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-left">
+                <img src="Image/logo.png" alt="Logo" class="footer-logo">
+                <p>Jl Kemandoran V <br> Kebayoran Lama - Jakarta Selatan.</p>
+                <h4>Subscribe Us</h4>
+                <div class="subscribe-box">
+                    <input type="email" placeholder="Your Email address">
+                    <button>➔</button>
+                </div>
+            </div>
+            <div class="footer-right">
+                <h4>Social Media</h4>
+                <div class="social-icons">
+                    <a href="#"><img src="Image/Instagram.png" alt="Instagram"></a>
+                    <a href="#"><img src="Image/Facebook.png" alt="Facebook"></a>
+                    <a href="#"><img src="Image/YouTube.png " alt="YouTube"></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    </body>
+    </html>
